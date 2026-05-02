@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hot Sevens Casino</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="game-container">
+        <h1 class="game-title">Hot Sevens</h1>
+        
+        <div class="balance-section">
+            <p>Çəkmələrin Balansı:</p>
+            <div class="balance-display">
+                <span id="balance">0.00</span> AZN
+            </div>
+            <button class="action-btn" onclick="addBalanceUI()">+10 Manat Əlavə Et</button>
+        </div>
+
+        <div class="hot-sevens-screen">
+            <div class="slot-machine">
+                <div class="reels" id="reels">
+                    <div class="reel" id="reel1">7</div>
+                    <div class="reel" id="reel2">7</div>
+                    <div class="reel" id="reel3">7</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="redemption-section">
+            <h2>Kodla Balans Artır</h2>
+            <p>Sizə verilməsi planlaşdırılan kodları daxil edin:</p>
+            <input type="text" id="codeInput" placeholder="XX-XXXX-XXXX" maxlength="13">
+            <button class="action-btn" onclick="redeemCode()">Kodu Qeydiyyata Al</button>
+        </div>
+    </div>
+
+    <script>
+        function loadBalance() {
+            let balance = localStorage.getItem('hotSevensBalance');
+            if (balance === null) {
+                localStorage.setItem('hotSevensBalance', '0.00');
+                balance = '0.00';
+            }
+            document.getElementById('balance').innerText = parseFloat(balance).toFixed(2);
+        }
+
+        function addBalanceUI() {
+            let currentBalance = parseFloat(localStorage.getItem('hotSevensBalance'));
+            currentBalance += 10;
+            localStorage.setItem('hotSevensBalance', currentBalance.toFixed(2));
+            loadBalance();
+        }
+
+        function redeemCode() {
+            const codeInput = document.getElementById('codeInput').value.trim();
+            const codeInputDisplay = document.getElementById('codeInput');
+
+            if (codeInput.length !== 12 && codeInput.length !== 13) {
+                alert("Xahiş olunur 12 və ya 13 rəqəmli kod daxil edin!");
+                return;
+            }
+
+            const validCodes = {
+                "112233445566": 10.00,
+                "775588990011": 25.50,
+                "123456789012": 50.00
+            };
+
+            if (validCodes[codeInput]) {
+                let currentBalance = parseFloat(localStorage.getItem('hotSevensBalance'));
+                currentBalance += validCodes[codeInput];
+                localStorage.setItem('hotSevensBalance', currentBalance.toFixed(2));
+                loadBalance();
+                
+                alert(`Uğurla balans artırıldı! Yeni balans: ${currentBalance.toFixed(2)} AZN`);
+                codeInputDisplay.value = '';
+            } else {
+                alert("Bu kod yalnışdır!");
+            }
+        }
+
+        window.onload = loadBalance;
+
+        const reels = [
+            document.getElementById('reel1'),
+            document.getElementById('reel2'),
+            document.getElementById('reel3')
+        ];
+
+        const symbols = ['🍒', '🍋', '🍇', '🔔', '💎', '7️⃣'];
+
+        function spin() {
+            reels.forEach(reel => {
+                reel.innerText = symbols[Math.floor(Math.random() * symbols.length)];
+            });
+            if (reels[0].innerText === '7️⃣' && reels[1].innerText === '7️⃣' && reels[2].innerText === '7️⃣') {
+                alert("BAŞARI! Tüm slotlar 7 idi!");
+                addBalanceUI();
+            }
+        }
+
+        setInterval(spin, 2000); 
+    </script>
+</body>
+</html>
