@@ -3,18 +3,26 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Müasir Kazino</title>
+<title>Hot Sevens Slot Oyunu</title>
 <style>
   body {
     margin: 0;
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #2c3e50, #3498db);
-    color: #fff;
+    background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+    background-size: 600% 600%;
+    animation: bgGradient 15s ease infinite;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: start;
     min-height: 100vh;
+    color: #fff;
+  }
+
+  @keyframes bgGradient {
+    0% {background-position: 0% 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0% 50%;}
   }
 
   header {
@@ -25,64 +33,67 @@
   h1 {
     margin: 0;
     font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
   }
 
   .casino-container {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 30px;
-    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 40px;
+    border-radius: 20px;
     margin-top: 20px;
     width: 90%;
-    max-width: 600px;
+    max-width: 700px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
   }
 
   .balance {
-    font-size: 1.2em;
-    margin-bottom: 20px;
+    font-size: 1.3em;
+    margin-bottom: 25px;
+    text-align: center;
   }
 
-  .buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-  }
-
-  button {
-    background-color: #2980b9;
-    border: none;
+  .spin-button {
+    display: block;
+    margin: 0 auto 30px auto;
     padding: 15px 30px;
+    font-size: 1.2em;
+    background-color: #e67e22;
+    border: none;
     border-radius: 10px;
-    font-size: 1em;
     cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     transition: background 0.3s;
   }
 
-  button:hover {
-    background-color: #3498db;
+  .spin-button:hover {
+    background-color: #d35400;
   }
 
   .reels {
     display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
+    justify-content: center;
+    gap: 20px;
   }
 
   .reel {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     background-color: #fff;
-    border-radius: 10px;
+    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2em;
-    color: #2c3e50;
+    font-size: 3em;
+    font-weight: bold;
+    color: #333;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
   }
 
   .result {
-    text-align: center;
+    margin-top: 30px;
     font-size: 1.5em;
+    text-align: center;
     min-height: 50px;
   }
 </style>
@@ -90,14 +101,12 @@
 <body>
 
 <header>
-  <h1>Müasir Kazino</h1>
+  <h1>Hot Sevens Slot</h1>
 </header>
 
 <div class="casino-container">
   <div class="balance" id="balance">Balans: 1000 AZN</div>
-  <div class="buttons">
-    <button id="spinBtn">Sürüş</button>
-  </div>
+  <button class="spin-button" id="spinBtn">Sürüş</button>
   <div class="reels">
     <div class="reel" id="reel1">🍒</div>
     <div class="reel" id="reel2">🍋</div>
@@ -108,7 +117,7 @@
 
 <script>
   let balance = 1000;
-  const reelSymbols = ['🍒', '🍋', '🔔', '💎', '7️⃣', '🍀'];
+  const reelSymbols = ['🍒', '🍋', '🔔', '🍀', '7️⃣'];
   const reel1 = document.getElementById('reel1');
   const reel2 = document.getElementById('reel2');
   const reel3 = document.getElementById('reel3');
@@ -116,13 +125,22 @@
   const balanceDiv = document.getElementById('balance');
   const spinBtn = document.getElementById('spinBtn');
 
+  // Qalib və uduş məbləğləri
+  const payouts = {
+    '7️⃣7️⃣7️⃣': 500,
+    '🔔🔔🔔': 200,
+    '🍒🍒🍒': 100,
+    '🍋🍋🍋': 80,
+    '🍀🍀🍀': 150,
+  };
+
   document.getElementById('spinBtn').addEventListener('click', () => {
-    if (balance < 10) {
-      alert('Balansınız kifayət deyil!');
+    if (balance < 50) {
+      alert('Balansınız kifayət deyil! Minimum 50 AZN lazımdır.');
       return;
     }
 
-    balance -= 10; // hər spin üçün məbləğ
+    balance -= 50; // hər spin üçün məbləğ
     updateBalance();
 
     // Döndürmə effekti
@@ -145,14 +163,21 @@
     const sym2 = reel2.textContent;
     const sym3 = reel3.textContent;
 
-    if (sym1 === sym2 && sym2 === sym3) {
-      // Qazandıq
-      let winnings = 50;
+    const combo = sym1 + sym2 + sym3;
+
+    if (payouts[combo]) {
+      const winnings = payouts[combo];
       balance += winnings;
       updateBalance();
-      resultDiv.textContent = `Təbriklər! Siz ${winnings} AZN qazandınız!`;
+      resultDiv.textContent = `Qazandınız! ${winnings} AZN qazandınız!`;
+    } else if (sym1 === sym2 && sym2 === sym3) {
+      // Ümumi eynilik
+      const winnings = 50;
+      balance += winnings;
+      updateBalance();
+      resultDiv.textContent = `Təbriklər! 50 AZN qazandınız!`;
     } else {
-      resultDiv.textContent = 'Təəssüf ki, uduzdunuz. Yenidən cəhd edin!';
+      resultDiv.textContent = 'Uduzdunuz. Yenidən cəhd edin!';
     }
   }
 
