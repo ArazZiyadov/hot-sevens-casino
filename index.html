@@ -3,106 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hot Sevens Casino</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Mənim Müasir Oyunum</title>
+    <style>
+        /* CSS - Dizayn hissəsi */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 50px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        #score {
+            font-size: 4rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #00f2fe;
+            text-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+        }
+
+        .game-btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            background: #ff416c;
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 75, 43, 0.4);
+        }
+
+        .game-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(255, 75, 43, 0.6);
+        }
+
+        .game-btn:active {
+            transform: scale(0.95);
+        }
+
+        .message {
+            margin-top: 20px;
+            font-style: italic;
+            opacity: 0.8;
+        }
+    </style>
 </head>
 <body>
 
-    <div class="game-container">
-        <h1 class="game-title">Hot Sevens</h1>
-        
-        <div class="balance-section">
-            <p>Çəkmələrin Balansı:</p>
-            <div class="balance-display">
-                <span id="balance">0.00</span> AZN
-            </div>
-            <button class="action-btn" onclick="addBalanceUI()">+10 Manat Əlavə Et</button>
-        </div>
-
-        <div class="hot-sevens-screen">
-            <div class="slot-machine">
-                <div class="reels" id="reels">
-                    <div class="reel" id="reel1">7</div>
-                    <div class="reel" id="reel2">7</div>
-                    <div class="reel" id="reel3">7</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="redemption-section">
-            <h2>Kodla Balans Artır</h2>
-            <p>Sizə verilməsi planlaşdırılan kodları daxil edin:</p>
-            <input type="text" id="codeInput" placeholder="XX-XXXX-XXXX" maxlength="13">
-            <button class="action-btn" onclick="redeemCode()">Kodu Qeydiyyata Al</button>
-        </div>
+    <div class="container">
+        <h1>Xal Topla!</h1>
+        <div id="score">0</div>
+        <button class="game-btn" onclick="increaseScore()">KLİKLƏ</button>
+        <p class="message" id="msg">Düyməyə bas və rekordu qır!</p>
     </div>
 
     <script>
-        function loadBalance() {
-            let balance = localStorage.getItem('hotSevensBalance');
-            if (balance === null) {
-                localStorage.setItem('hotSevensBalance', '0.00');
-                balance = '0.00';
-            }
-            document.getElementById('balance').innerText = parseFloat(balance).toFixed(2);
-        }
+        // JavaScript - Məntiq hissəsi
+        let count = 0;
+        const scoreDisplay = document.getElementById('score');
+        const messageDisplay = document.getElementById('msg');
 
-        function addBalanceUI() {
-            let currentBalance = parseFloat(localStorage.getItem('hotSevensBalance'));
-            currentBalance += 10;
-            localStorage.setItem('hotSevensBalance', currentBalance.toFixed(2));
-            loadBalance();
-        }
+        function increaseScore() {
+            count++;
+            scoreDisplay.innerText = count;
 
-        function redeemCode() {
-            const codeInput = document.getElementById('codeInput').value.trim();
-            const codeInputDisplay = document.getElementById('codeInput');
-
-            if (codeInput.length !== 12 && codeInput.length !== 13) {
-                alert("Xahiş olunur 12 və ya 13 rəqəmli kod daxil edin!");
-                return;
-            }
-
-            const validCodes = {
-                "112233445566": 10.00,
-                "775588990011": 25.50,
-                "123456789012": 50.00
-            };
-
-            if (validCodes[codeInput]) {
-                let currentBalance = parseFloat(localStorage.getItem('hotSevensBalance'));
-                currentBalance += validCodes[codeInput];
-                localStorage.setItem('hotSevensBalance', currentBalance.toFixed(2));
-                loadBalance();
-                
-                alert(`Uğurla balans artırıldı! Yeni balans: ${currentBalance.toFixed(2)} AZN`);
-                codeInputDisplay.value = '';
-            } else {
-                alert("Bu kod yalnışdır!");
+            // Müəyyən xallarda mesajları dəyişək
+            if (count === 10) {
+                messageDisplay.innerText = "Yaxşı başlayırsan! 🔥";
+                document.body.style.background = "linear-gradient(135deg, #11998e, #38ef7d)";
+            } else if (count === 50) {
+                messageDisplay.innerText = "Sən bir peşəkarsan! 🚀";
+                document.body.style.background = "linear-gradient(135deg, #8e2de2, #4a00e0)";
+            } else if (count === 100) {
+                messageDisplay.innerText = "ƏFSANƏVİSƏN! 👑";
+                document.body.style.background = "linear-gradient(135deg, #f8ff00, #3ad59f)";
             }
         }
-
-        window.onload = loadBalance;
-
-        const reels = [
-            document.getElementById('reel1'),
-            document.getElementById('reel2'),
-            document.getElementById('reel3')
-        ];
-
-        const symbols = ['🍒', '🍋', '🍇', '🔔', '💎', '7️⃣'];
-
-        function spin() {
-            reels.forEach(reel => {
-                reel.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-            });
-            if (reels[0].innerText === '7️⃣' && reels[1].innerText === '7️⃣' && reels[2].innerText === '7️⃣') {
-                alert("BAŞARI! Tüm slotlar 7 idi!");
-                addBalanceUI();
-            }
-        }
-
-        setInterval(spin, 2000); 
     </script>
+
 </body>
 </html>
